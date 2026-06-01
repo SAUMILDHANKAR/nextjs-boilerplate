@@ -34,3 +34,53 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+Below page.tsx works in local and shows the table
+```
+// app/page.tsx
+import { createServerClient } from '@/lib/supabase/server'
+
+export default async function Home() {
+  // Create Supabase client (server-side)
+  const supabase = createServerClient()
+
+  // Fetch announcements table
+  const { data, error } = await supabase
+    .from('announcements')
+    .select('*')
+
+  if (error) {
+    return <div>Error: {error.message}</div>
+  }
+
+  return (
+    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+        <h1 className="text-2xl font-bold mb-6">Announcements</h1>
+
+        {data?.length ? (
+          <div className="w-full space-y-4">
+            {data.map((row) => (
+              <div
+                key={row.id}
+                className="border rounded-md p-4 shadow-sm bg-zinc-100 dark:bg-zinc-800"
+              >
+                <h2 className="text-lg font-semibold">{row.title}</h2>
+                {row.content && (
+                  <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                    {row.content}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p>No announcements found.</p>
+        )}
+      </main>
+    </div>
+  )
+}
+```
+will troubleshoot the reasons later
