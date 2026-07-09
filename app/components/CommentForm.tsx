@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+// Highlight: Explicitly import FormEvent from 'react'
+import { useState, FormEvent } from 'react'
 
 export default function CommentForm() {
   const [email, setEmail] = useState('')
@@ -8,34 +9,37 @@ export default function CommentForm() {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
 
-  async function handleSubmit(
-    e: React.FormEvent<HTMLFormElement>
-  ) {
+  // Highlight: Used the directly imported FormEvent type here
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
 
     setLoading(true)
     setMessage('')
 
-    const response = await fetch('/api/decentralbiz', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email,
-        comment,
-      }),
-    })
+    try {
+      const response = await fetch('/api/decentralbiz', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          comment,
+        }),
+      })
 
-    if (response.ok) {
-      setEmail('')
-      setComment('')
-      setMessage('Comment submitted!')
-    } else {
-      setMessage('Something went wrong.')
+      if (response.ok) {
+        setEmail('')
+        setComment('')
+        setMessage('Comment submitted!')
+      } else {
+        setMessage('Something went wrong.')
+      }
+    } catch (error) {
+      setMessage('Failed to send request.')
+    } finally {
+      setLoading(false)
     }
-
-    setLoading(false)
   }
 
   return (
