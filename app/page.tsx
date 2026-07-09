@@ -1,6 +1,9 @@
 import { createServerClient } from '@/lib/supabase/server'
 import CommentForm from './components/CommentForm'
 
+// Highlight: Force Next.js to treat this route as completely dynamic
+export const dynamic = 'force-dynamic'
+
 export default async function Home() {
   const supabase = createServerClient()
 
