@@ -1,7 +1,7 @@
 'use client'
 
-// Highlight: Explicitly import FormEvent from 'react'
-import { useState, FormEvent } from 'react'
+// Highlight: Import SubmitEvent instead of FormEvent
+import { useState, SubmitEvent } from 'react'
 
 export default function CommentForm() {
   const [email, setEmail] = useState('')
@@ -9,8 +9,8 @@ export default function CommentForm() {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
 
-  // Highlight: Used the directly imported FormEvent type here
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  // Highlight: Type the event as SubmitEvent<HTMLFormElement>
+  async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault()
 
     setLoading(true)
@@ -47,9 +47,8 @@ export default function CommentForm() {
       onSubmit={handleSubmit}
       className="w-full space-y-4 mt-12"
     >
-      <h2 className="text-xl font-semibold">
-        Leave a Comment
-      </h2>
+      {/* ... rest of your JSX remains exactly the same ... */}
+      <h2 className="text-xl font-semibold">Leave a Comment</h2>
 
       <input
         type="email"
